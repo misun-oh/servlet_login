@@ -10,7 +10,18 @@
 <title>Insert title here</title>
 </head>
 <body>
-로그인 해주세요!
+로그인<br>
+<p>
+<%
+String errMsg = (String)request.getAttribute("errMsg");
+if(errMsg!=null && !errMsg.equals("")){
+%>
+<%=errMsg %>
+<%
+}
+%>
+<%=request.getParameter("id") %>
+</p>
 <form action="login" method="post">
 id:<input type="text" name="id" value="test"><br>
 pw:<input type="text" name="pw" value="1234"><br>
@@ -18,4 +29,9 @@ pw:<input type="text" name="pw" value="1234"><br>
 </form>
 </body>
 </html>
+
+
+<!--  
 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
+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
+-->

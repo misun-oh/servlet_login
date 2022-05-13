@@ -3,6 +3,8 @@ package com.omi;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,9 +67,17 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserDto userDto = new UserDto();
+		
 		userDto.setId(request.getParameter("id"));
 		userDto.setPw(request.getParameter("pw"));
 		
+		ServletContext app = this.getServletContext();
+		RequestDispatcher dispatcher =  app.getRequestDispatcher("/login.jsp");
+		
+		if(!"test".equals(userDto.getId())) {
+			request.setAttribute("errMsg", "id/pw를 확인해주세요.");
+			dispatcher.forward(request, response);
+		}
 		HttpSession session = request.getSession();
 		session.setAttribute("user", userDto);
 		response.sendRedirect("/loginOk.jsp");
