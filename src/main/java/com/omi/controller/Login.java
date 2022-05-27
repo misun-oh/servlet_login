@@ -1,4 +1,4 @@
-package com.omi;
+package com.omi.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,9 +36,11 @@ public class Login extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		UserDto user = (UserDto)session.getAttribute("user");
-		
+			
 		if(user != null) {
-			response.sendRedirect("/loginOk.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("dispatcher.jsp");
+			request.setAttribute("request","requestValue");
+			dispatcher.forward(request, response);
 		} else {
 			response.sendRedirect("/login.jsp");			
 		}
@@ -71,11 +73,14 @@ public class Login extends HttpServlet {
 		userDto.setId(request.getParameter("id"));
 		userDto.setPw(request.getParameter("pw"));
 		
+		// HTTP 요청 -> Java Servlet -> jsp페이지
 		ServletContext app = this.getServletContext();
 		RequestDispatcher dispatcher =  app.getRequestDispatcher("/login.jsp");
 		
 		if(!"test".equals(userDto.getId())) {
 			request.setAttribute("errMsg", "id/pw를 확인해주세요.");
+			
+			// forward 방식은 request영역과 response영역을 공유!
 			dispatcher.forward(request, response);
 		}
 		HttpSession session = request.getSession();
